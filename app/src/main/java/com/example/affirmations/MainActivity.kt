@@ -1,6 +1,8 @@
 package com.example.affirmations
 
+import TopAppBarCompose
 import android.os.Bundle
+import android.provider.ContactsContract.Data
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -18,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.affirmations.data.Datasource
 import com.example.affirmations.model.Affirmation
+
 import com.example.affirmations.ui.theme.AffirmationsTheme
 
 class MainActivity : ComponentActivity() {
@@ -32,24 +35,28 @@ class MainActivity : ComponentActivity() {
 @Preview(showSystemUi = true)
 @Composable
 fun AffirmationApp(modifier: Modifier = Modifier) {
-    appBar()
-   Surface(modifier = Modifier.fillMaxSize()) {
-       AffirmationList(affirmationList = Datasource().loadAffirmations())
-   }
+    Scaffold(
+        topBar = { TopAppBarCompose()}
+    ) {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            AffirmationList(affirmationList = Datasource().loadAffirmations())
+        }
+    }
 }
+
 @Composable
 private fun AffirmationList(affirmationList: List<Affirmation>, modifier: Modifier = Modifier) {
     LazyColumn {
-        items(affirmationList) { affirmation ->
-            affirmationCard(affirmation)
+        items(affirmationList) { affirmation -> affirmationCard(affirmation)
         }
     }
 }
 
 
+
 @Composable
 fun affirmationCard(affirmation: Affirmation, modifier: Modifier = Modifier) {
-    Card(modifier = Modifier.padding(8.dp), elevation = 10.dp) {
+    Card(modifier = Modifier.padding(18.dp),elevation = 8.dp) {
         Column {
             Image(
                 painter = painterResource(affirmation.imageResourceId),
@@ -67,13 +74,5 @@ fun affirmationCard(affirmation: Affirmation, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.h6
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun previewCard() {
-    AffirmationsTheme {
-        affirmationCard(affirmation = Affirmation(R.string.affirmation1, R.drawable.image1))
     }
 }
